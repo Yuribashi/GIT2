@@ -1,0 +1,361 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=us-ascii">
+<meta name=Generator content="Microsoft Word 14 (filtered)">
+<style>
+<!--.VISIBLEPAGE
+	{overflow:hidden;
+	visibility:visible;}
+.PAGEAREA
+	{overflow:auto;}
+.TOOLBARSTYLE
+	{BACKGROUND-COLOR: buttonface;}
+.VISIBLEPAGE
+	{overflow:hidden;
+	visibility:visible;}
+.PAGEAREA
+	{overflow:hidden;}
+
+ /* Font Definitions */
+ @font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoAcetate, li.MsoAcetate, div.MsoAcetate
+	{mso-style-link:"Balloon Text Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:8.0pt;
+	font-family:"Tahoma","sans-serif";}
+p.bodystyle, li.bodystyle, div.bodystyle
+	{mso-style-name:bodystyle;
+	margin:0in;
+	margin-bottom:.0001pt;
+	background:#999999;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+p.visiblepage, li.visiblepage, div.visiblepage
+	{mso-style-name:visiblepage;
+	margin:1.5pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+p.toolbarstyle, li.toolbarstyle, div.toolbarstyle
+	{mso-style-name:toolbarstyle;
+	margin-right:0in;
+	margin-left:0in;
+	font-size:12.0pt;
+	font-family:"Arial","sans-serif";
+	display:none;}
+p.buttonstyle, li.buttonstyle, div.buttonstyle
+	{mso-style-name:buttonstyle;
+	margin-right:0in;
+	margin-left:0in;
+	font-size:9.0pt;
+	font-family:"Times New Roman","serif";}
+p.textstyle, li.textstyle, div.textstyle
+	{mso-style-name:textstyle;
+	margin-right:0in;
+	margin-left:0in;
+	font-size:9.0pt;
+	font-family:"Times New Roman","serif";}
+p.editstyle, li.editstyle, div.editstyle
+	{mso-style-name:editstyle;
+	margin-right:0in;
+	margin-left:0in;
+	font-size:9.0pt;
+	font-family:"Times New Roman","serif";}
+p.combostyle, li.combostyle, div.combostyle
+	{mso-style-name:combostyle;
+	margin-right:0in;
+	margin-left:0in;
+	font-size:9.0pt;
+	font-family:"Times New Roman","serif";
+	display:none;}
+span.textstyle1
+	{mso-style-name:textstyle1;}
+span.BalloonTextChar
+	{mso-style-name:"Balloon Text Char";
+	mso-style-link:"Balloon Text";
+	font-family:"Tahoma","sans-serif";}
+.MsoChpDefault
+	{font-size:10.0pt;}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+-->
+</style>
+
+<script language="JavaScript">
+  var g_iCurrentPage = 1;
+  var g_kiLastPage   = 1;
+
+  var g_oCurrentImage;
+  var g_cxMax = 0;
+  var g_cyMax = 0;
+  var g_cyLast = 0;
+  var g_iZoom = 100;
+
+  var g_fTimerActive = false;
+  var g_sPrevStyleZoom;
+  var g_sPrevStyleNav;
+  
+  var g_ieVer = 0;
+
+  function OnImgLoad( imgPage )
+  {
+    var cx = imgPage.width;
+    var cy = imgPage.height;
+    var fUpdate = false;
+
+    if (cx > g_cxMax)
+    { 
+      g_cxMax = cx;
+      fUpdate = true;
+    }
+    if (cy > g_cyMax)
+    {
+      g_cyMax = cy;
+      fUpdate = true;
+    }
+    
+    if ( cx < cy*0.66 )
+    {
+      document.styleSheets[1].addRule("#" + imgPage.id, "height:95%;width:auto");
+    }
+    
+    if ( imgPage.id == "Page"+g_kiLastPage )
+    {
+      g_cyLast = cy;
+      fUpdate = true;
+    }
+    
+    if ( g_ieVer == 0 )
+    {
+      document.styleSheets[0].rules[0].style.overflow = 'hidden';
+      document.styleSheets[0].rules[2].style.width = '100%';
+      document.styleSheets[0].rules[3].style.display = 'block';
+      EnableZoom();
+    }
+      
+    if ( fUpdate )
+      OnResize();
+  }
+  
+  function EnableZoom()
+  {
+    var appVer = navigator.appVersion;
+    var ndx = appVer.indexOf("MSIE");
+    if ( ndx >= 0 )
+    {
+      g_ieVer = parseFloat(appVer.substring(ndx+4)); 
+    }
+    else
+    {
+      g_ieVer = -1;
+    }
+    
+    var oZoom = document.all.comboZoom;
+    
+    if ( oZoom != null && g_ieVer >= 5.5 )
+      oZoom.style.display = 'block';
+  }
+    
+  function UpdatePage ()
+  {
+    document.all.edtPage.value = g_iCurrentPage;
+    document.all.btnPrev.disabled = g_iCurrentPage == 1;
+    document.all.btnNext.disabled = g_iCurrentPage == g_kiLastPage;
+    document.all.comboZoom.value=g_iZoom;
+  }
+  
+  function ChangePage (iDirection)
+  {
+    GoToPage (g_iCurrentPage + iDirection);
+  }
+  
+
+  function OnScroll ()
+  {
+    if (!g_fTimerActive)
+    {
+      g_fTimerActive   = true;
+      window.setTimeout (OnScrollTimeout, 100);
+    }
+  }
+
+  function OnScrollTimeout ()
+  {
+    var i;
+    var oImg;
+    var oPageArea = document.all.PageArea;
+
+    for (i = 1; i <= g_kiLastPage; i++)
+    {
+      oImg = document.all.item('Page' + i);
+      if (oPageArea.scrollTop + 25 < oImg.offsetTop)
+        break;
+    }
+
+    if (i > 1)
+    {
+      i--;  
+    }
+
+    g_iCurrentPage = i;
+    g_oCurrentImage = document.all.item('Page' + g_iCurrentPage);
+
+    UpdatePage();
+
+    g_fTimerActive = false;
+  }
+
+  function OnResize ()
+  {
+    if ( g_cxMax > 0 )
+    {
+      SetZoom();
+      OnScrollTimeout();
+    }
+  }
+
+  function SetZoom ()
+  {
+    var fZoom;
+    var oPageArea = document.all.PageArea;
+    
+    var cxScrollArea = oPageArea.clientWidth;
+    var cyScrollArea = document.body.clientHeight - oPageArea.offsetTop;
+    
+    if ( (cxScrollArea > 0) && (cyScrollArea > 0) 
+      && (g_cxMax > 0) && (g_cyMax > 0) )
+    {
+      var xZoom = cxScrollArea / (g_cxMax + 35);
+      var yZoom = cyScrollArea / (g_cyMax + 35);
+
+      if (g_iZoom == 100)
+      {
+        fZoom = 1.001;
+      } 
+      else 
+      {
+        if (g_iZoom <= -2)
+        {
+          fZoom = xZoom;
+        } 
+        else 
+        { 
+          if (xZoom < yZoom)
+          {
+            fZoom = xZoom;
+          }
+          else
+          {
+            fZoom = yZoom;
+          }
+        }
+      }
+
+      document.styleSheets[0].rules[1].style.zoom = fZoom;
+      document.styleSheets[0].rules[2].style.height = cyScrollArea;
+    
+      if ( g_cyLast > 0 )
+      {
+        var oLastImg = document.all.item("Page"+g_kiLastPage);
+        var imgHeight = parseInt(g_cyLast * fZoom) + 2;
+        if ( cyScrollArea - imgHeight > 0 )
+          oLastImg.style.marginBottom = cyScrollArea - imgHeight;
+        else
+          oLastImg.style.marginBottom = 2;
+      }
+    }
+  }
+
+
+  function DoZoom (iZoom)
+  {
+    g_iZoom = iZoom;
+    document.all.PageArea.scrollLeft = 0;
+    SetZoom ();
+    GoToPage(g_iCurrentPage);
+  }
+
+  function GoToPage (iPage)
+  {
+    var oPage = document.all.item('Page' + iPage);
+    if (oPage != null)
+    {
+      g_iCurrentPage = iPage;
+      
+      g_oCurrentImage = oPage;
+
+      document.all.PageArea.scrollTop = g_oCurrentImage.offsetTop;
+    }
+    UpdatePage();
+  }
+
+  function OnEditKeyDown ()
+  {
+    if (window.event.keyCode == 13)
+    {
+      GoToPage ( parseInt(document.all.edtPage.value) );
+      document.all.PageArea.focus();
+    } 
+  }
+  
+</script>
+</head>
+
+<body bgcolor="#999999" lang=EN-US onresize="OnResize()">
+
+<div class=WordSection1>
+
+<table class=MsoNormalTable border=0 cellpadding=0>
+ <tr>
+  <td style='padding:.75pt .75pt .75pt .75pt'></td>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <input class=ButtonStyle id=btnNext type=button value="Next Page &gt;" onclick="ChangePage(1);"
+  id=btnNext>
+  </td>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal>&nbsp;</p>
+  </td>
+  <td nowrap style='padding:.75pt .75pt .75pt .75pt'><span id=txtPage>
+  <p class=MsoNormal><span class=textstyle1><span style='font-size:9.0pt'>Page</span></span></span></p>
+  </td>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><INPUT TYPE="text" MAXLENGTH="5" SIZE="4" id=edtPage
+  onKeyDown="OnEditKeyDown()" onchange="GoToPage(this.value)"></p>
+  </td>
+  <td nowrap style='padding:.75pt .75pt .75pt .75pt'><span id=txtOF>
+  <p class=MsoNormal><span class=textstyle1><span style='font-size:9.0pt'>of 1</span></span></span></p>
+  </td>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal>&nbsp;</p>
+  </td>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><SELECT id=comboZoom onchange="DoZoom(this.value)">
+<OPTION VALUE="-1">Whole Page
+<OPTION VALUE="-2">Page Width
+<OPTION SELECTED VALUE="100">100%
+</SELECT></p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal align=center style='text-align:center'><img width=816
+height=1056 id=Page1 src="...Another%20NOTE_files/image001.jpg"
+alt="Description: cid:E50D2949AD0F4235AF893D95A7BF5925@dns"></p>
+
+</div>
+
+</body>
+
+</html>
